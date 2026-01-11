@@ -1,0 +1,60 @@
+{% extends 'pokedex/base.html' %}
+
+{% block title %}{{ pokemon.name }} - Detalle{% endblock %}
+
+{% block extra_css %}
+<style>
+    .poke-gradient { background: radial-gradient(circle at top right, #fff1f2 0%, #ffffff 100%); }
+    .animate-float { animation: float 3s infinite ease-in-out; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-[90vh] flex items-center justify-center p-4">
+    <div class="max-w-4xl w-full bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row border border-gray-100">
+        
+        <div class="md:w-1/2 p-12 flex flex-col items-center justify-center relative poke-gradient border-r border-gray-50">
+            <span class="absolute top-8 left-8 text-7xl font-black text-gray-50 italic">
+                #{{ pokemon.id|stringformat:"03d" }}
+            </span>
+            
+            <img src="{{ pokemon.image_url }}" alt="{{ pokemon.name }}" width="280" height="280" class="w-64 h-64 object-contain relative z-10 drop-shadow-2xl animate-float">
+            
+            <div class="mt-8 flex gap-3">
+                {% for type in pokemon.types %}
+                <span class="px-6 py-2 rounded-2xl text-xs font-black uppercase tracking-widest shadow-lg type-{{ type }}">
+                    {{ type }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="md:w-1/2 p-12 flex flex-col justify-center">
+            <h1 class="text-6xl font-black text-gray-800 capitalize mb-2 leading-none">
+                {{ pokemon.name }}
+            </h1>
+            <p class="text-gray-600 font-mono text-sm tracking-widest uppercase mb-10">
+                {{ pokemon.name_reversed }}
+            </p>
+            
+            <div class="grid grid-cols-2 gap-6">
+                <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100">
+                    <p class="text-gray-600 text-[10px] font-bold uppercase mb-1 tracking-widest">Peso</p>
+                    <p class="text-3xl font-black text-gray-800">{{ pokemon.weight }} <span class="text-sm font-normal text-gray-600">kg</span></p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100">
+                    <p class="text-gray-600 text-[10px] font-bold uppercase mb-1 tracking-widest">Altura</p>
+                    <p class="text-3xl font-black text-gray-800">{{ pokemon.height }} <span class="text-sm font-normal text-gray-600">m</span></p>
+                </div>
+            </div>
+
+            <div class="mt-12">
+                <a href="{% url 'index' %}" class="flex items-center justify-center w-full py-5 bg-red-500 text-white rounded-2xl font-bold text-lg hover:bg-red-600 shadow-xl transition-all">
+                    ← Volver
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

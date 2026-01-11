@@ -1,0 +1,59 @@
+<div id="pokedex-loader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-slate-50/90 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="relative w-20 h-20">
+        <div class="absolute top-0 w-20 h-10 bg-red-500 rounded-t-full border-4 border-slate-800"></div>
+        <div class="absolute bottom-0 w-20 h-10 bg-white rounded-b-full border-4 border-slate-800 border-t-0"></div>
+        <div class="absolute top-[36px] w-20 h-2 bg-slate-800 z-10"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-white border-4 border-slate-800 rounded-full z-20 flex items-center justify-center">
+            <div class="w-2 h-2 bg-slate-200 rounded-full animate-pulse"></div>
+        </div>
+    </div>
+    <p class="mt-4 text-slate-600 font-bold tracking-widest uppercase text-xs">Cargando...</p>
+</div>
+
+<style>
+    body.loading { overflow: hidden; }
+    #pokedex-loader.active { opacity: 1; pointer-events: auto; }
+    #pokedex-loader .relative { animation: rotate-pokeball 0.8s infinite linear; }
+    @keyframes rotate-pokeball { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+</style>
+
+<script>
+    let loaderTimeout;
+
+    const showLoader = () => {
+        // Solo mostramos el loader si la carga tarda más de 200ms
+        loaderTimeout = setTimeout(() => {
+            const loader = document.getElementById('pokedex-loader');
+            loader.classList.add('active');
+            document.body.classList.add('loading');
+        }, 200); 
+    };
+
+    const hideLoader = () => {
+        clearTimeout(loaderTimeout);
+        const loader = document.getElementById('pokedex-loader');
+        loader.classList.remove('active');
+        document.body.classList.remove('loading');
+    };
+
+    // Al cargar la página, ocultamos cualquier loader activo inmediatamente
+    window.addEventListener('DOMContentLoaded', hideLoader);
+    window.addEventListener('load', hideLoader);
+
+    // Activar loader solo en navegaciones reales que cambian de página
+    document.addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (link && 
+            link.href && 
+            !link.href.includes('#') && 
+            link.origin === window.location.origin && // Solo enlaces internos
+            link.target !== '_blank') {
+            showLoader();
+        }
+    });
+
+    // Manejar el botón "Atrás" del navegador
+    window.addEventListener('pageshow', (event) => {
+        if (event.persisted) hideLoader();
+    });
+</script>

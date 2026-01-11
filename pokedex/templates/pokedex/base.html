@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explora la Pokedex Top 50 con estadísticas detalladas, tipos y búsqueda avanzada.">
+    <title>{% block title %}PokeDjango 2026{% endblock %}</title>
+    
+    <link rel="stylesheet" href="{% static 'pokedex/css/tailwind.min.css' %}">
+    
+    <style>
+        /* CONFIGURACIÓN DE FUENTES LOCALES (Elimina el error 404) */
+        @font-face {
+            font-family: 'Plus Jakarta Sans';
+            font-style: normal;
+            font-weight: 400;
+            src: url("{% static 'pokedex/fonts/jakarta-regular.woff2' %}") format('woff2');
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Plus Jakarta Sans';
+            font-style: normal;
+            font-weight: 700;
+            src: url("{% static 'pokedex/fonts/jakarta-bold.woff2' %}") format('woff2');
+            font-display: swap;
+        }
+
+        /* ESTILOS GLOBALES Y ACCESIBILIDAD */
+        * { font-family: 'Plus Jakarta Sans', sans-serif !important; -webkit-font-smoothing: antialiased; }
+        body { background-color: #f8fafc; color: #1f2937; }
+        
+        /* Alpine.js cloak para evitar parpadeo en el toggle */
+        [x-cloak] { display: none !important; }
+
+        /* SKELETON ANIMATION OPTIMIZADA */
+        .skeleton {
+            background: #f3f4f6;
+            background-image: linear-gradient(90deg, #f3f4f6 0px, #e5e7eb 40px, #f3f4f6 80px);
+            background-size: 600px;
+            animation: shimmer 2s infinite linear;
+            will-change: background-position;
+        }
+        @keyframes shimmer { 0% { background-position: -150px; } 100% { background-position: 450px; } }
+
+        .img-loading { opacity: 0; }
+        .img-loaded { opacity: 1; transition: opacity 0.5s ease-in; }
+
+        /* COLORES DE TIPOS POKÉMON (Compatibilidad local) */
+        .type-grass { background-color: #78C850 !important; color: white !important; }
+        .type-fire { background-color: #F08030 !important; color: white !important; }
+        .type-water { background-color: #6890F0 !important; color: white !important; }
+        .type-bug { background-color: #A8B820 !important; color: white !important; }
+        .type-normal { background-color: #A8A878 !important; color: white !important; }
+        .type-poison { background-color: #A040A0 !important; color: white !important; }
+        .type-electric { background-color: #F8D030 !important; color: #1f2937 !important; }
+        .type-ground { background-color: #E0C068 !important; color: #1f2937 !important; }
+        .type-fairy { background-color: #EE99AC !important; color: white !important; }
+        .type-fighting { background-color: #C03028 !important; color: white !important; }
+        .type-psychic { background-color: #F85888 !important; color: white !important; }
+        .type-rock { background-color: #B8A038 !important; color: white !important; }
+        .type-ghost { background-color: #705898 !important; color: white !important; }
+        .type-ice { background-color: #98D8D8 !important; color: #1f2937 !important; }
+        .type-dragon { background-color: #7038F8 !important; color: white !important; }
+        .type-flying { background-color: #A890F0 !important; color: white !important; }
+        .type-steel { background-color: #B8B8D0 !important; color: #1f2937 !important; }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="loading">
+    {% include 'pokedex/loader.html' %}
+
+    <main id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        function onImageLoad(id) {
+            const img = event.target;
+            const skeleton = document.getElementById(`skeleton-${id}`);
+            if(img) {
+                img.classList.remove('img-loading');
+                img.classList.add('img-loaded');
+            }
+            if (skeleton) skeleton.style.display = 'none';
+        }
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
